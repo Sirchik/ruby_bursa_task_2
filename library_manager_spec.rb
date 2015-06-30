@@ -17,24 +17,35 @@ describe LibraryManager do
   let(:manager) { LibraryManager.new(ivan_testenko, (DateTime.now.new_offset(0) - 2.days)) }
 
   it 'should count penalty' do
-    manager.penalty
+    res = manager.penalty
+#      ((0,00007 * (2015-1996))) + 
+#      (0,000003 * 3280) + 
+#      (0,0005) * 1400 * 48
+    expect(res).to eq 784 
   end
 
   it 'should know if author can meet another author' do
-    manager.could_meet_each_other? leo_tolstoy, oscar_wilde
+    res = manager.could_meet_each_other? leo_tolstoy, oscar_wilde
+    expect(res).to eq true
   end  
 
   it 'should count days to buy' do
-    manager.days_to_buy
+    res = manager.days_to_buy
+    #1 / 0,01167 / 24
+    expect(res).to eq 4
   end
 
   it 'should transliterate ukrainian names' do
     ukrainan_author = Author.new(1856, 1916, 'Іван Франко')
-    manager.transliterate ukrainan_author
+    res = manager.transliterate ukrainan_author
+    expect(res).to eq "Ivan Franko"
   end
 
   it 'should count penalty to finish' do
     manager.penalty_to_finish
+    #1400 * 0.001 * 48
+    #p res
+    #expect(res).to eq 67 
   end
 
   

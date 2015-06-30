@@ -3,7 +3,7 @@ class Reader
 
   def initialize name, reading_speed
     @name = name
-    @reding_speed = reading_speed
+    @reading_speed = reading_speed
   end
 
 end
