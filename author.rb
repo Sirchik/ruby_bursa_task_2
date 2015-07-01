@@ -8,6 +8,8 @@ class Author
   end
 
   def can_meet? other_author
-
+  	lifeOfAutor = (year_of_birth..year_of_death)
+    lifeOfOtherAutor = (other_author.year_of_birth..other_author.year_of_death)
+    return lifeOfAutor.overlaps?lifeOfOtherAutor
   end
 end

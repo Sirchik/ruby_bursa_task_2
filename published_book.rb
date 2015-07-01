@@ -8,4 +8,8 @@ class PublishedBook < Book
     super author, title
   end
 
+  def ageY currDate = Time.now
+  	currDate.year - published_at
+  end
+
 end

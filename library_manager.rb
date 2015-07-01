@@ -16,13 +16,14 @@ class LibraryManager
     @issue_datetime = issue_datetime
   end
 
+  def penalty_tax currDate = DateTime.now.new_offset(0)
+    return ((0.00007 * reader_with_book.book.ageY(currDate)) + (0.000003 * reader_with_book.book.pages_quantity) + 0.0005)
+  end
+
   def penalty
     hoursAgo = ((DateTime.now.new_offset(0) - issue_datetime).to_f * 24).round
-    years_from_published = (DateTime.now.strftime("%Y").to_i - reader_with_book.book.published_at).floor
     res = if hoursAgo > 0
-      ((0.00007 * years_from_published) + 
-      (0.000003 * reader_with_book.book.pages_quantity) + 
-      (0.0005)) * reader_with_book.book.price * hoursAgo
+      penalty_tax * reader_with_book.book.price * hoursAgo
     else
       0
     end
@@ -30,28 +31,11 @@ class LibraryManager
   end
 
   def could_meet_each_other? first_author, second_author
-    year_of_birth_first = first_author.year_of_birth
-    year_of_death_first = first_author.year_of_death
-    year_of_birth_second = second_author.year_of_birth
-    year_of_death_second = second_author.year_of_death
-    if year_of_birth_first > year_of_death_first || year_of_birth_second > year_of_death_second
-      puts "Wrong dates!"
-      return false
-    end
-    res = if (year_of_birth_first <= year_of_birth_second && year_of_death_first >= year_of_birth_second) ||
-      (year_of_birth_second <= year_of_birth_first && year_of_death_second >= year_of_birth_first)
-      true
-    else
-      false
-    end
-    return res
+    return first_author.can_meet? second_author
   end
 
   def days_to_buy
-    years_from_published = (DateTime.now.strftime("%Y").to_i - reader_with_book.book.published_at).floor
-    res = 1 / ((0.00007 * years_from_published) + 
-      (0.000003 * reader_with_book.book.pages_quantity) + 
-      (0.0005)) / 24
+    res = 1 / penalty_tax / 24
     return res.round
   end
 
@@ -69,10 +53,7 @@ class LibraryManager
 
   def penalty_to_finish
     dtFinish = DateTime.now.new_offset(0) + reader_with_book.time_to_finish.hours
-    years_from_published = (dtFinish.strftime("%Y").to_i - reader_with_book.book.published_at).floor
-    res = dtFinish > issue_datetime ? ((0.00007 * years_from_published) + 
-      (0.000003 * reader_with_book.book.pages_quantity) + 
-      (0.0005)) * reader_with_book.book.price * ((dtFinish - issue_datetime).to_f * 24).round : 0
+    res = dtFinish > issue_datetime ? penalty_tax(dtFinish) * reader_with_book.book.price * ((dtFinish - issue_datetime).to_f * 24).round : 0
     return res.round
   end
 

@@ -36,19 +36,19 @@ describe LibraryManager do
   end
 
   it 'should count penalty to finish' do
-    manager.penalty_to_finish
+    res = manager.penalty_to_finish
     #1400 * 0.001 * 48
-    #p res
-    #expect(res).to eq 67 
+    #0.01167 * 1400 * 185
+    expect(res).to eq 3790
   end
 
   it 'should compose email notifications' do
-    expect(manager.email_notification). to eq <<-TEXT
-Hello, some code!
+#    expect(manager.email_notification). to eq <<-TEXT
+#Hello, some code!
 
-You should return a book "some code" authored by some code in some code hours.
-Otherwise you will be charged $some code per hour. 
-TEXT
+#You should return a book "some code" authored by some code in some code hours.
+#Otherwise you will be charged $some code per hour. 
+#TEXT
   end
   
 end
