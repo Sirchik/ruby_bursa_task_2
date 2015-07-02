@@ -59,13 +59,18 @@ class LibraryManager
 
   def email_notification_params
       {
-        penalty: "some code",
-        hours_to_deadline: "some code",
+        penalty: (penalty_tax * reader_with_book.book.price).round / 100.0,
+        hours_to_deadline: issue_datetime > DateTime.now.new_offset(0) ? (issue_datetime - DateTime.now.new_offset(0)).hours : 0
       }
   end
 
   def email_notification
-    #use email_notification_params
+<<-TEXT
+Hello, #{reader_with_book.name}!
+
+You should return a book "#{reader_with_book.book.title}" authored by #{reader_with_book.book.author.name} in #{email_notification_params[:hours_to_deadline]} hours.
+Otherwise you will be charged $#{email_notification_params[:penalty]} per hour. 
+TEXT
   end
 
 end

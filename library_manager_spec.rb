@@ -43,12 +43,12 @@ describe LibraryManager do
   end
 
   it 'should compose email notifications' do
-#    expect(manager.email_notification). to eq <<-TEXT
-#Hello, some code!
+    expect(manager.email_notification). to eq <<-TEXT
+Hello, Ivan Testenko!
 
-#You should return a book "some code" authored by some code in some code hours.
-#Otherwise you will be charged $some code per hour. 
-#TEXT
+You should return a book "War and Peace" authored by Leo Tolstoy in 0 hours.
+Otherwise you will be charged $0.16 per hour. 
+TEXT
   end
   
 end
